@@ -117,27 +117,26 @@ void letsgosky(matrix_t matrix){
 
                 visitati[i][j] = 1;
                 box[numBoxes].c = j; box[numBoxes].r = i; //quindi prendo subito le coordinate di upper left corner
+
                 int k = 1, h = 1;
-                box[numBoxes].area++;
                 box[numBoxes].larghezza++;
                 box[numBoxes].altezza++;
 
                 //controllo i vicini
-                while(isBlack(matrix.mat[j][i+k])&&(i+k < matrix.numOfRows)){
+                while(isBlack(matrix.mat[i][j+k])&&(j+k < matrix.numOfCol)){
                     box[numBoxes].larghezza++;
-                    visitati[j][i+k] = 1;//quindi non controllerò più questa cella
-                    box[numBoxes].area++;
-                    k++; //in modo che all'interazione successiva io controllo il vicino a dx. In caso, il ciclo più esterno salta le nere già controllate
-
-                    while (isBlack(matrix.mat[j+h][i])&&(j+h < matrix.numOfCol)){
-                        box[numBoxes].altezza++;
-                        visitati[j+h][i] = 1;
-                        h++;
-                        box[numBoxes].area++;
+                    visitati[i][j+k] = 1;//quindi non controllerò più questa cella
+                    k++; // In modo che all'interazione successiva io controllo il vicino a dx. In caso, il ciclo più esterno salta le nere già controllate
                     }
-                };
+
+                while (isBlack(matrix.mat[i+h][j])&&(i+h < matrix.numOfRows)){
+                    box[numBoxes].altezza++;
+                    visitati[i+h][j] = 1;
+                    h++;
+                }
                 //FOR DEBUG PURPOSES ONLY
                 printf("%d\n", numBoxes);
+                box[numBoxes].area = box[numBoxes].larghezza*box[numBoxes].altezza;
                 numBoxes++;
             }
 
@@ -167,6 +166,8 @@ void stampaRisultati(blackBox_t *box, int numBoxes){
             pos = i;
         }
     }
-    printf("L'altezza maggiore è di: %d, del rettangolo c: %d, r: %d", box[pos].altezza, box[pos].c+1, box[pos].r+1);
-
+    printf("Altezza maggiore è di: %d, del rettangolo c: %d, r: %d\n", box[pos].altezza, box[pos].c+1, box[pos].r+1);
+    for(int i = 0; i<numBoxes; i++){
+        printf("%d ", box[i].altezza);
+    }
 }
